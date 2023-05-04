@@ -1,0 +1,42 @@
+#!/usr/bin/env python3
+# Property test for the checksum benchmark
+# Copyright (C) 2023  Nguyễn Gia Phong
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+from string import printable
+from subprocess import PIPE, run
+from sys import argv
+from unittest import TestCase, main
+
+from hypothesis import given
+from hypothesis.strategies import text
+
+OUT = ('Enter an abitrarily long string, ending with carriage return >'
+       ' Check sum is {}\n')
+
+prog, checksum = argv[:2]
+
+
+class Test(TestCase):
+    # Problem doesn't specify integer width but examples scale up to 32b
+    @given(data=text(printable.replace('\n', '')))
+    def test_checksum(self, data):
+        self.assertEqual(OUT.format(chr((sum(map(ord, data)) & 63) + 32)),
+                         run(checksum, input=data+'\n',
+                             stdout=PIPE, encoding='utf-8').stdout)
+
+
+if __name__ == '__main__':
+    main(argv=[prog])

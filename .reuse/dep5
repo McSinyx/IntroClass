@@ -12,15 +12,23 @@ Files:
  *.sh
  */Makefile
  Makefile
- README.md
  bin/genprog_tests.py
  bin/metadataGenerator.py
-Copyright: ProgramRepair
+Copyright: 2015, ProgramRepair
 License: BSD-3-Clause
 
 Files: bin/gp_repatch.py
-Copyright: Edward Smith
+Copyright: 2016, Edward Smith
 License: GPL-3.0-or-later
+
+Files: */tests/property
+Copyright: 2023, Nguyễn Gia Phong
+License: GPL-3.0-or-later
+
+Files: README.md
+Copyright: 2015, ProgramRepair
+           2023, Nguyễn Gia Phong
+License: BSD-3-Clause
 
 Files: .gitignore
 Copyright: N/A

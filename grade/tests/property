@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+# Property test for the grade benchmark
+# Copyright (C) 2023  Nguyễn Gia Phong
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+from bisect import bisect
+from subprocess import PIPE, run
+from sys import argv
+from unittest import TestCase, main
+
+from hypothesis import given
+from hypothesis.strategies import floats, lists
+
+# Ugh such random use of whitespace
+PROMPT = ('Enter thresholds for A, B, C, D\nin that order,'
+          ' decreasing percentages > Thank you.'
+          ' Now enter student score (percent) >')
+GRADE = 'Student has an {} grade\n' # sic
+FAIL = 'Student has failed the course\n'
+OUT = [PROMPT+FAIL, *(PROMPT+GRADE.format(c) for c in 'DCBA')]
+
+prog, grade = argv[:2]
+
+
+class Test(TestCase):
+    @given(thresholds=lists(floats(0, 100), min_size=4, max_size=4),
+           score=floats(0, 100))
+    def test_grade(self, thresholds, score):
+        thresholds.sort()
+        stdin = ' '.join(map(str, thresholds[::-1])) + f'\n{score}\n'
+        stdout = run(grade, input=stdin, stdout=PIPE, encoding='utf-8').stdout
+        self.assertEqual(OUT[bisect(thresholds, score)], stdout)
+
+
+if __name__ == '__main__':
+    main(argv=[prog])

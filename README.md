@@ -19,9 +19,11 @@ introclass/
  |-checksum/
  |--Makefile
  |--tests/
+ |----checksum.c
  |----blackbox/
  |--------1.in
  |--------1.out
+ |----property
  |----whitebox/
  |--f4a823174201234546789abcdeffff<repository ID hex string>.../
  |----Makefile
@@ -87,7 +89,8 @@ Makefile in the directory.
 
 To run the blackbox or whitebox test suites against a compiled submission,
 use the `blackbox_test.sh` and `whitebox_test.sh` scripts in a submission
-directory. This is described in detail in the Running section.
+directory. For property-based testing, run the `tests/property` scripts
+in the parent directory. This is described in detail in the Running section.
 
 A submission directory also contains the Genprog and AE log files produced
 during our experiments in the paper "The ManyBugs and IntroClass Benchmarks
@@ -129,6 +132,13 @@ due to Address Space Layout Randomization (ASLR). To make the programs run
 with fully deterministically requires disabling ASLR. In Linux this is done
 by:
 `(root) $ echo 0 > /proc/sys/kernel/randomize_va_space`
+
+Each benchmark also include a property-based test written in Python
+using [Hypothesis](https://hypothesis.works).  It usually covers
+more edge cases than the generated black- and whitebox suites,
+and can be invoked via:
+
+    tests/property <submission executable>
 
 # Extending
 

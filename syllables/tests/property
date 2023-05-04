@@ -1,0 +1,42 @@
+#!/usr/bin/env python3
+# Property test for the syllables benchmark
+# Copyright (C) 2023  Nguyễn Gia Phong
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+from string import printable
+from subprocess import PIPE, run
+from sys import argv
+from unittest import TestCase, main
+
+from hypothesis import given
+from hypothesis.strategies import text
+
+VOWELS = 'aeiouy'
+OUT = 'Please enter a string > The number of syllables is {}.\n'
+
+prog, syllables = argv[:2]
+
+
+class Test(TestCase):
+    @given(string=text(printable, max_size=19))
+    def test_syllables(self, string):
+        self.assertEqual(OUT.format(sum(string.count(c) for c in VOWELS)),
+                         # undocumented: ground truth strips last char
+                         run(syllables, input=string+'\n',
+                             stdout=PIPE, encoding='utf-8').stdout)
+
+
+if __name__ == '__main__':
+    main(argv=[prog])

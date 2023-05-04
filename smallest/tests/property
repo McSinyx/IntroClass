@@ -1,0 +1,38 @@
+#!/usr/bin/env python3
+# Property test for the smallest benchmark
+# Copyright (C) 2023  Nguyễn Gia Phong
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+from subprocess import PIPE, run
+from sys import argv
+from unittest import TestCase, main
+
+from hypothesis import given
+from hypothesis.strategies import integers, lists
+
+OUT = 'Please enter 4 numbers separated by spaces > {} is the smallest\n'
+prog, smallest = argv[:2]
+
+
+class Test(TestCase):
+    @given(numbers=lists(integers(-128, 127), min_size=4, max_size=4))
+    def test_smallest(self, numbers):
+        self.assertEqual(OUT.format(min(numbers)),
+                         run(smallest, input=' '.join(map(str, numbers)),
+                             stdout=PIPE, encoding='utf-8').stdout)
+
+
+if __name__ == '__main__':
+    main(argv=[prog])
