@@ -1,0 +1,27 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Source: https://github.com/McSinyx/IntroClass
+Upstream-Name: IntroClass
+Upstream-Contact: Nguyễn Gia Phong <mcsinyx@disroot.org>
+
+Files:
+ *.c
+ *.in
+ *.json
+ *.log
+ *.out
+ *.sh
+ */Makefile
+ Makefile
+ README.md
+ bin/genprog_tests.py
+ bin/metadataGenerator.py
+Copyright: ProgramRepair
+License: BSD-3-Clause
+
+Files: bin/gp_repatch.py
+Copyright: Edward Smith
+License: GPL-3.0-or-later
+
+Files: .gitignore
+Copyright: N/A
+License: CC0-1.0

@@ -1,0 +1,7 @@
+.hypothesis
+checksum/tests/checksum
+digits/tests/digits
+grade/tests/grade
+median/tests/median
+smallest/tests/smallest
+syllables/tests/syllables
